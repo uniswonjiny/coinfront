@@ -1,0 +1,27 @@
+@font-face {
+    font-family: 'Dongle';
+    src: url('Dongle-Regular.ttf?#iefix') format('embedded-opentype'),
+        url('Dongle-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'Dongle';
+    src: url('Dongle-Bold.ttf?#iefix') format('embedded-opentype'),
+        url('Dongle-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Dongle';
+    src: url('Dongle-Light.ttf?#iefix') format('embedded-opentype'),
+        url('Dongle-Light.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}

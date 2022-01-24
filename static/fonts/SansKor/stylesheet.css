@@ -1,0 +1,52 @@
+@font-face {
+    font-family: 'SansKor';
+    src: url('NotoSansKR-Regular.otf');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'SansKor';
+    src: url('NotoSansKR-Black.otf');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SansKor';
+    src: url('NotoSansKR-Bold.otf');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SansKor';
+    src: url('NotoSansKR-Light.otf');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'SansKor';
+    src: url('NotoSansKR-Medium.otf');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'SansKor';
+    src: url('NotoSansKR-Thin.otf');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+
