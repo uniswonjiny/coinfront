@@ -60,6 +60,7 @@
                                         outlined
                                         rounded
                                         block
+                                        @click="phoneNumberEvent"
                                     >
                                     중복확인
                                     </v-btn>
@@ -70,7 +71,7 @@
                 </div>
             </div>
         </div>
-        <accountFooter nextUrl="/account/account2"/>
+        <accountFooter nextUrl="/account/account2" :disable="disable" />
     </div>
 </template>
 
@@ -86,13 +87,21 @@ export default {
     data() {
         return {
             items: ['남자', '여자', '미입력'],
+            phoneNumberCheck: false,
         };
     },
     computed: {
-
+      disable(){
+        // 세부 규칙은 아직 미정상태
+        // 보인 인증후 들어오는 값으로 처리할것이다.
+        return !(this.phoneNumberCheck);
+      }
     },
     methods: {
-
+      phoneNumberEvent(){
+        // 핸드폰번호 본인 인증 부분 부착할예정
+        this.phoneNumberCheck = true;
+      }
     }
 };
 </script>

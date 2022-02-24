@@ -1,8 +1,6 @@
 export const state = () => ({
     appDrawer: false,
     currentDrawerContent: null,
-    currency: 'USD',
-    language: 'English',
     loading: true,
     openDialogLanguage: false,
     openDialogCurrency: false,
@@ -19,22 +17,6 @@ export const mutations = {
         state.currentDrawerContent = payload;
     },
 
-    setDialogLanguage(state, payload) {
-        state.openDialogLanguage = payload;
-    },
-
-    setLanguage(state, payload) {
-        state.language = payload;
-    },
-
-    setCurrency(state, payload) {
-        state.currency = payload;
-    },
-
-    setDialogCurrency(state, payload) {
-        state.openDialogCurrency = payload;
-    },
-
     setLoading(state, payload) {
         state.loading = payload;
     },
@@ -49,15 +31,5 @@ export const mutations = {
 };
 
 export const actions = {
-    changeCurrency({ commit, state }, payload) {
-        commit('setCurrency', payload);
-        const cookieParams = {
-            data: state.currency
-        };
 
-        this.$cookies.set('currency', cookieParams, {
-            path: '/',
-            maxAge: 60 * 60 * 24 * 7
-        });
-    }
 };

@@ -266,7 +266,6 @@
 
 <script>
 import Breadcrumb from '~/components/elements/commons/Breadcrumb';
-import VuePrinter from 'vue-dom-printer'
 import { mapState } from 'vuex';
 
 export default {

@@ -26,8 +26,6 @@
                             <span class="badge">5</span></nuxt-link>
                         </li>
                     </ul>
-                    <language-currency />
-                    <form-search />
                 </div>
             </div>
         </div>
@@ -46,7 +44,6 @@
 <script>
 import Notification from '~/components/shared/headers/modules/Notification';
 import { coinMenu } from '~/static/data/menu.json';
-import { getProductById } from '~/repositories/ProductRepository';
 import LoginModal from '~/components/shared/headers/modules/LoginModal';
 import { mapState } from 'vuex';
 
@@ -62,17 +59,8 @@ export default {
     },
     computed: {
         ...mapState({
-            cartItems: state => state.cart.cartItems,
-            wishlistItems: state => state.wishlist.items,
             appDrawer: state => state.app.appDrawer
         }),
-        productCartQuantity() {
-            let quantity = 0;
-            this.cartItems.forEach(element => {
-                quantity += element.quantity;
-            });
-            return quantity;
-        }
     },
     created() {
         window.addEventListener('scroll', this.handleScroll);
@@ -80,9 +68,6 @@ export default {
     },
     destroyed() {
         window.removeEventListener('scroll', this.handleScroll);
-    },
-    async mounted() {
-        this.product = await getProductById(5);
     },
     methods: {
         handleScroll() {

@@ -1,7 +1,7 @@
 export default {
     head: {
         htmlAttrs: {
-            lang: 'en'
+            lang: 'kr'
         },
         titleTemplate: 'Unicore 채굴기 중계',
         title: 'Unicore 채굴기 중계',
@@ -60,29 +60,34 @@ export default {
     ],
 
     plugins: [
-        { src: '~plugins/vueliate.js', ssr: false },
+        { src: '~/plugins/vueliate.js', ssr: false },
         { src: '~/plugins/lazyLoad.js', ssr: false },
         { src: '~/plugins/swiper-plugin.js', ssr: false },
         { src: '~/plugins/vue-slide-up-down.js', ssr: false },
-        { src: '~/plugins/vue-printer.js', ssr: false },
+        { src: '~/plugins/axios.js', ssr: false }
     ],
 
     buildModules: [
         '@nuxtjs/vuetify',
         '@nuxtjs/style-resources',
-        'cookie-universal-nuxt'
+        '@nuxtjs/moment',
     ],
 
-    modules: ['nuxt-i18n'],
+    modules: [
+        '@nuxtjs/axios',
+        "vue-toastification/nuxt",
+        ["vue-toastification/nuxt", {
+            timeout: 1000,
+            draggable: false
+        }]
+    ],
+    toast: {
+        timeout: 2000,
+        closeOnClick: false
+    },
 
-    i18n: {
-        locales: [
-            { code: 'en', file: 'en.json' },
-            { code: 'fr', file: 'fr.json' }
-        ],
-        lazy: true,
-        defaultLocale: 'en',
-        langDir: 'lang/locales/'
+    moment: {
+        locales: ['ko'],
     },
 
     target: 'server',
@@ -93,7 +98,12 @@ export default {
     },
 
     server: {
-        port: 4003,
+        port: process.env.PORT || 4003,
         host: 'localhost'
+    },
+    axios : {
+        browserBaseURL: process.env.NODE_ENV === 'production' ? 'https://api.swonjiny.co.kr/api' : 'http://localhost/api',
+        baseURL: process.env.NODE_ENV === 'production' ? 'https://api.swonjiny.co.kr/api' : 'http://localhost/api',
+        https: process.env.NODE_ENV === 'production' ? true : false,
     }
 };

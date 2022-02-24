@@ -25,6 +25,7 @@ import HeaderMobileCoin from '~/components/shared/mobile/headers/HeaderCoin';
 import Loading from '~/components/shared/Loading';
 
 export default {
+    // middleware: 'authentication',
     components: {
         NavigationBottom,
         ScrollTop,

@@ -12,7 +12,7 @@
                                     <v-text-field
                                         class="form-control ps-form__input"
                                         type="text"
-                                        value="unicoreId"
+                                        v-model="unicoreId"
                                         required
                                         rounded
                                     />
@@ -24,6 +24,7 @@
                                         outlined
                                         rounded
                                         block
+                                        @click="idCheckEvent"
                                     >
                                         중복확인
                                     </v-btn>
@@ -71,10 +72,10 @@
                                     <v-text-field
                                         class="form-control ps-form__input"
                                         type="text"
-                                        value=""
+                                        v-model="recommendSendId"
                                         required
                                         rounded
-                                        label="추천인의 아이디를 입력하세요"
+
                                     />
                                 </div>
                                 <div class="col-4"> 
@@ -84,6 +85,7 @@
                                         outlined
                                         rounded
                                         block
+                                        @click="recommendedEvent"
                                     >
                                         조회
                                     </v-btn>
@@ -94,19 +96,27 @@
                 </div>
             </div>
         </div>
-        <accountFooter nextUrl="/account/account3"/>        
+        <accountFooter
+            nextUrl="account-account3"
+            :disable="disable"
+            :userId="this.unicoreId"
+            :userPassword="this.password1"
+            :recommendedId="this.recommendSendId" />
+        <accountInfoConfirm :userId="recommendedId" :userName="recommendedName" :dialog="accountDialog"/>
     </div>
 </template>
 
 <script>
 import accountFooter from '~/components/account/accountFooter'
 import accountHeader from '~/components/account/accountHeader'
+import accountInfoConfirm from '~/components/account/accountInfoConfirm'
 
 export default {
     layout: 'empty',
     components : {
         accountFooter,
-        accountHeader
+        accountHeader,
+        accountInfoConfirm
     },
     data() {
         return {
@@ -116,12 +126,61 @@ export default {
             password2: null,
             registerEmail: null,
             registerPassword: null,
-            rememberLogin: false
+            rememberLogin: false,
+            unicoreId: null,
+            accountDialog: false,
+            recommendSendId:'',
+            recommendedId: '',
+            recommendedName: '',
+            idCheck: false
+
         };
     },
     computed: {
+      disable(){
+        return !(this.idCheck && this.password1 && this.password1 === this.password2);
+      }
     },
     methods: {
-    }
+      idCheckEvent(){
+        if(!this.unicoreId){
+          this.$toast.info('아이디를 입력하세요.', { position: "top-left" })
+          return;
+        }
+        this.$axios.get(`/auth/userCount/${this.unicoreId}`)
+        .then((res)=>{
+          if(res.data.count !== 0){
+            this.$toast.info('이미 가입한 아이디입니다.', { position: "top-left" })
+            this.idCheck= false;
+          } else {
+            this.$toast.info('사용가능한 아이디입니다..', { position: "bottom-right" })
+            this.idCheck= true;
+          }
+        })
+        .catch(err=> {
+          this.idCheck= false;
+          this.$toast.warning(`${err.message}`, { position: "top-left" })
+        })
+      },
+      recommendedEvent(){
+        if(!this.recommendSendId){
+          this.$toast.info(`추천인아이들 입력하세요`, { position: "top-left" });
+          return;
+        }
+        this.$axios.get(`/auth/userName/${this.recommendSendId}`)
+        .then((res) => {
+            if(res.data) {
+              this.recommendedId= res.data.user_id;
+              this.recommendedName= res.data.user_name;
+              this.accountDialog = true;
+            } else {
+              this.accountDialog = false;
+              this.$toast.warning(`추천인이 존재하지 않습니다.`, { position: "top-left" })
+            }
+        }).catch(err=> {
+          this.$toast.warning(`${err.message}`, { position: "top-left" })
+        })
+      }
+    },
 };
 </script>

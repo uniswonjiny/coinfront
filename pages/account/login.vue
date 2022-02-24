@@ -16,9 +16,10 @@
                             <v-text-field
                                 class="form-control ps-form__input"
                                 type="text"
-                                v-model="userId"
+                                v-model="user_id"
                                 required
                                 rounded
+                                @keyup.enter="enterEvent('id')"
                             />
                         </div>
                     </div>
@@ -26,13 +27,15 @@
                         <div class="ps-form__group">
                             <label class="ps-form__label">비밀번호를 입력하세요 *</label>
                             <v-text-field
+                                ref="userPassRef"
                                 class="form-control ps-form__input"
-                                v-model="loginPassword"
+                                v-model="user_password"
                                 :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                                 :type="show1 ? 'text' : 'password'"
                                 required
                                 rounded
                                 @click:append="show1 = !show1"
+                                @keyup.enter="enterEvent"
                             />
                         </div>
                     </div>
@@ -41,7 +44,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="ps-form__submit">
-                            <button class="ps-btn ps-btn--warning" @click="handleLogin()">
+                            <button class="ps-btn ps-btn--warning" @click="loginEvent()">
                                 로그인
                             </button>
                             
@@ -55,7 +58,6 @@
                             </nuxt-link>
                         </div>
                     </div>
-                    
                 </div>
             </div>   
         </div>
@@ -63,24 +65,65 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
     layout: 'empty',
     data() {
         return {
-            userId: null,
+            user_id: null,
             show1: false,
-            loginPassword: null,
+            user_password: null,
         };
     },
     methods: {
-
+      ...mapActions({
+        loginAction: 'auth/login'
+      }),
+      enterEvent(type){
+        if(type==='id') {
+          if(!this.user_password) this.$refs.userPassRef.focus();
+          else this.loginEvent();
+        } else {
+          if(this.user_id && this.user_password) this.loginEvent();
+        }
+      },
+      async loginEvent(){
+        if(!this.user_id || this.user_id.trim().length ===0) return this.$toast.warning(`아이디를 입력하세요`, { position: "top-left" })
+        if(!this.user_password || this.user_password.trim().length ===0) return this.$toast.error(`비밀번호를 입력하세요`, { position: "top-left" })
+        try {
+          await this.loginAction({user_id: this.user_id, user_password: this.user_password})
+          this.$router.push('/coin');
+        }catch (e) {
+          this.$toast.error(`${e.message}`, { position: "top-left" })
+        }
+        // this.$axios.post('/auth/loginInfo' , {'user_id' : this.user_id , 'user_password' : this.user_password})
+        //     .then((res)=>{
+        //       res.data = {
+        //         bank_account: null
+        //         bank_holder: null
+        //         bank_name: null
+        //         mobile_phone: "01039997777"
+        //         recommend_user_id: "unicore"
+        //         user_birth_day: "19990101"
+        //         user_id: "unicore001"
+        //         user_name: "사용자이름입니다"
+        //         user_status: 1
+        //       }
+        //     })
+        //     .catch(err => {
+        //       this.$toast.warning(`${err.message}`, { position: "top-left" })
+        //     })
+      }
     }
 };
 </script>
 
 <style scoped>
 .ps-form--review .ps-btn {
- 
      max-width: 100%; 
+}
+
+.custom-block-class{
+  color: white;
 }
 </style>

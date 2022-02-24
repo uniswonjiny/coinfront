@@ -5,7 +5,7 @@
             <h1 class="ps-categogy__name">메인페이지<sup>(01)</sup></h1>
             <div class="ps-categogy__content">
                 <div class="row row-reverse">
-                    <h1>메인페이지</h1>
+                    <h1>코인메인페이지</h1>
                 </div>
             </div>
         </div>

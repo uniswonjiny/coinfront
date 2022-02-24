@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import { baseUrl } from '~/repositories/Repository';
-import Moment from "moment";
 
 export default {
     props: {

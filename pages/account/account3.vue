@@ -11,8 +11,9 @@
                         <v-list-item >
                             <v-list-item-action>
                                 <v-checkbox
-                                :input-value="active"
-                                color="primary"
+                                    v-model="inputAll"
+                                    color="primary"
+                                    @click="allChangeEvent()"
                             ></v-checkbox>
                             </v-list-item-action>
                             <v-list-item-title> 전체 동의(필수)</v-list-item-title>
@@ -20,8 +21,9 @@
                         <v-list-item>
                             <v-list-item-action>
                                 <v-checkbox
-                                :input-value="active"
-                                color="primary"
+                                    v-model="input1"
+                                    color="primary"
+                                    @click="checkEvent"
                             ></v-checkbox>
                             </v-list-item-action>
                             <v-list-item-title>만 14세 이상입니다.</v-list-item-title>
@@ -29,8 +31,9 @@
                         <v-list-item>
                             <v-list-item-action>
                                 <v-checkbox
-                                :input-value="active"
-                                color="primary"
+                                    v-model="input2"
+                                    color="primary"
+                                    @click="checkEvent"
                             ></v-checkbox>
                             </v-list-item-action>
                             <v-list-item-title>서비스 이용 약관</v-list-item-title>
@@ -43,8 +46,9 @@
                         <v-list-item>
                             <v-list-item-action>
                                 <v-checkbox
-                                :input-value="active"
-                                color="primary"
+                                    v-model="input3"
+                                    color="primary"
+                                    @click="checkEvent"
                             ></v-checkbox>
                             </v-list-item-action>
                             <v-list-item-title>개인정보 처리방침</v-list-item-title>
@@ -63,7 +67,7 @@
         <div class="container">
             <div class="row m-0">
                 <div class="col-12 p-0">
-                    <p class="text-center"><a class="ps-footer__link" @click.prevent="confirmEvent" to="#" ><i class="icon-wallet"></i>회원가입</a></p>
+                    <p class="text-center"><a class="ps-footer__link" @click="confirmEvent" to="#" ><i class="icon-wallet"></i>회원가입</a></p>
                 </div>
             </div>
         </div>
@@ -83,15 +87,46 @@ export default {
         accountFooter,
         accountHeader
     },
-    created() {
+    mounted() {
+      this.userId = this.$route.params.userId;
+      this.userPassword = this.$route.params.userPassword;
+      this.recommendedId = this.$route.params.recommendedId;
     },
 
     data() {
         return {
+          userId: null,
+          userPassword: null,
+          recommendedId: null,
+
+          inputAll: false,
+          input1: false,
+          input2: false,
+          input3: false,
         };
     },
     methods: {
+      allChangeEvent(){
+        if(this.inputAll){
+          this.input1= true;
+          this.input2= true;
+          this.input3= true;
+        }else {
+          this.input1= false;
+          this.input2= false;
+          this.input3= false;
+        }
+      },
+      checkEvent(){
+        (this.input1 && this.input2 && this.input3) ? this.inputAll = true : this.inputAll = false;
+      },
+      confirmEvent() {
+        if(this.inputAll && this.userId && this.userPassword ) {
+
+        } else this.$toast.warning(`약관등을 동의해 주세요`, { position: "top-left" })
+      }
     }
+
 };
 </script>
 
