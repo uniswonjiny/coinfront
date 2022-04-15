@@ -43,13 +43,13 @@ export default {
       if(this.disable) {
         this.$toast.warning(`${this.message}`, { position: "top-left" })
       }else {
-
         if(!this.userId)this.$router.push(this.nextUrl);
         else {
-          // 네이드 라우터로 넘겨야 파라미터를 전달할수 있다. nuxt 네임드 파라미터 방식, '1주소-2주소' 'account-account2'
-          this.$router.push({path: this.nextUrl , params: { userId : this.userId, userPassword: this.userPassword, recommendedId: this.recommendedId }})
+          // params 로 보낼대 될때도 있고  query 로 보내야 될때도 있다. nuxt 내부 오류인듯
+          //this.$router.push({path: this.nextUrl , params: { userId : this.userId, userPassword: this.userPassword, recommendedId: this.recommendedId }})
+          this.$router.push({name: 'account-account3' , params: { userId : this.userId, userPassword: this.userPassword, recommendedId: this.recommendedId }})
         }
-        //this.$router.push(     this.nextUrl);
+
       }
 
     }

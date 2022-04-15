@@ -21,3 +21,10 @@ export const generateArr = maxItems => {
     }
     return result;
 };
+
+// 금액 3자리 마다 컴마
+export const commaCurrency = val => {
+    const valComma = val.toString()
+        .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    return valComma;
+}

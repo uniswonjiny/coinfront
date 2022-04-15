@@ -1,28 +1,28 @@
 <template>
     <header :class="['ps-header ps-header--1 ps-header--mobile', {'ps-header--sticky': sticky}]">
-        <notification />
+        <notification :show="false"/>
         <div class="ps-header__middle">
             <div class="container">
                 <div class="ps-logo">
-                    <nuxt-link to="/">
+                    <nuxt-link to="/coin/uniMining">
                         <img src="/img/unicoin.png" alt
                     /></nuxt-link>
                 </div>
                 <div class="ps-header__right">
                     <ul class="ps-header__icons">
                         <li class="ps-header__user">
-                             <a href="#" class="ps-header__item"><i class="icon-user"></i></a> 
+                             <a href="#" class="ps-header__item"><i class="icon-user"></i></a>
                              <login-modal />
                         </li>
                         <li>
-                            <a
+                            <nuxt-link
                                 class="ps-header__item open-search"
-                                href="#"
+                                to="/message"
                                 :style="{'color': 'coral'}"
                                 ><i class="fa fa-bell-o"></i
                             >
-                            <span class="badge">1</span>
-                            </a>
+                            <span class="badge">{{this.$store.state.auth.noticeCount}}</span>
+                            </nuxt-link>
                         </li>
                     </ul>
                 </div>

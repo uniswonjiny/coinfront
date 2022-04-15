@@ -35,7 +35,7 @@
               class="ma-0 pa-0"
               dark
               color="#103178"
-              @click="dialog = false"
+              @click="emitEvent()"
               block
           >
             확인
@@ -55,6 +55,11 @@ export default {
     },
     userId: String,
     userName: String
+  },
+  methods:{
+    emitEvent(){
+      this.$emit('closeEvent')
+    }
   }
 
 }

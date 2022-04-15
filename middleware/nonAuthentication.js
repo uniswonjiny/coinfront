@@ -1,5 +1,7 @@
 export default function({ store, redirect }) {
-    if (store.state.auth.isToken) {
+    console.log(11)
+    if (store.state.auth.isLoggedIn) {
+        console.log(22)
         return redirect('/');
     }
 }

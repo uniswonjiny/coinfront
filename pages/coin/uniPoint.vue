@@ -13,14 +13,16 @@
       <div class="card border-0 text-center">
         <div class="card-body" :style="{'backgroundColor':'#103178'}">
           <h3 class="text-white">
-            1 Point = {{ (this.$store.state.account.uniPointPrice) ? this.$store.state.account.uniPointPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0 }} 원
+            1 Point = {{
+              (this.$store.state.account.uniPointPrice) ? this.$store.state.account.uniPointPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0
+            }} 원
           </h3>
         </div>
         <div class="card-body">
           <a
               class="ps-btn ps-btn--warning w-50"
               href="#"
-              @click.prevent="dialog=!dialog"
+              @click.prevent="buyDialog=!buyDialog"
           >
             UNI point 구매
           </a>
@@ -31,7 +33,7 @@
       <div class="card border-0 bg-light">
         <div class="card-body text-center">
                     <span class="display-2 font-weight-bold text-danger">
-                        12389,457
+                        {{ this.$store.state.account.uniPointSum }}
                     </span>
           <sub class="font-weight-bold" :style="{'color':'#103178 !important'}">Point</sub>
         </div>
@@ -40,34 +42,41 @@
       <div class="row">
         <div class="col-6"><sub>UNI Point 거래내역</sub></div>
         <div class="col-6 text-right">
-          <select class="custom-select custom-select-sm text-right">
-            <option v-for="(item, index) in sortItems" value="item.value" :key="index">{{ item.text }}</option>
+          <select class="custom-select custom-select-sm text-right" v-model="getSort">
+            <option v-for="(item, index) in sortItems" :value="item.value" :key="index">{{ item.text }}</option>
           </select>
         </div>
       </div>
       <div class="dropdown-divider"></div>
-      <div v-for="(item, index ) in sellList" :key="index">
+
+      <div v-for="(item, index ) in this.sellList" :key="index">
         <div class="row" @click.prevent="detailDialogEvent(true ,item )">
           <div class="col-5">
-            <div>{{ item.type1 }}
-              <span v-if="item.type2 == 0" class="ps-badge ps-badge--outstock">
+            <div>{{ item.sales_type === 'M' ? '구매' : '판매' }}
+              <span v-if="item.type == 'R'" class="ps-badge ps-badge--outstock">
                                     확인중
                                 </span>
             </div>
-            <small>{{ item.desc }}</small>
+            <small v-if="item.type === 'R'">{{ item.created_at }}</small>
+            <small v-if="item.type !== 'R'">{{ item.updated_at }}</small>
           </div>
           <div class="col-7 text-right">
-            <span :class="item.type1 === '구매' ? 'ps-product__price' : 'ps-product__del' ">{{ item.point }}</span> UNIP
+            <span :class="item.sales_type === 'M' ? 'ps-product__price' : 'ps-product__del' ">{{
+                item.uni_point
+              }}</span> UNIP
           </div>
         </div>
         <div class="dropdown-divider"/>
       </div>
-      <button class="ps-btn ps-btn--primary mt-3 ">더보기</button>
-      <div class="dropdown-divider"/>
+      <div class="row" v-if="this.sellList.length ===0">
+        <div class="col-12 text-center">내역이 없습니다.</div>
+        <div class="dropdown-divider"/>
+      </div>
+
     </div>
     <div class="dropdown-divider"/>
 
-    <v-dialog v-model="dialog" max-width="500">
+    <v-dialog v-model="buyDialog" max-width="500">
       <v-card>
         <v-toolbar
             color="#103178"
@@ -99,13 +108,13 @@
               </div>
             </v-col>
           </v-row>
-          <v-divider class="mt-2 mb-0" />
-          <v-card-text >
+          <v-divider class="mt-2 mb-0"/>
+          <v-card-text>
             <div class="text-h5 text-center font-weight-black" :style="{'color': '#FD8D27'}">
               구매하시겠습니까?
             </div>
           </v-card-text>
-          <v-divider class="my-0" />
+          <v-divider class="my-0"/>
           <v-card-actions>
             <v-col>
               <v-btn
@@ -113,7 +122,7 @@
                   color="#103178"
                   rounded
                   min-width="130"
-                  @click="dialog=false"
+                  @click="buyDialog=false"
               >아니오
               </v-btn>
             </v-col>
@@ -152,8 +161,10 @@ export default {
   data() {
     return {
       dialog: false,
+      buyDialog: false,
       detailDialog: false,
       detailInfo: null,
+      selected: 'all',
       breadcrumb: [
         {
           url: '/coin/uniMining',
@@ -162,50 +173,6 @@ export default {
         {
           url: '/coin/uniPoint',
           text: 'UNI Point'
-        }
-      ],
-      sellList: [
-        {
-          id: 111,
-          point: 100,
-          type1: '판매',
-          type2: 0,
-          desc: '2021.12.20 01:01:01'
-        },
-        {
-          id: 112,
-          point: 700,
-          type1: '구매',
-          type2: 0,
-          desc: '2021.12.20 09:29:59'
-        },
-        {
-          id: 113,
-          point: 190,
-          type1: '구매',
-          type2: 1,
-          desc: '2021.12.19 22:11:01'
-        },
-        {
-          id: 114,
-          point: 170,
-          type1: '판매',
-          type2: 1,
-          desc: '2021.12.18 18:11:01'
-        },
-        {
-          id: 115,
-          point: 300,
-          type1: '구매',
-          type2: 1,
-          desc: '2021.12.17 12:11:01'
-        },
-        {
-          id: 116,
-          point: 1100,
-          type1: '구매',
-          type2: 1,
-          desc: '2021.12.12 12:11:01'
         }
       ],
 
@@ -224,51 +191,31 @@ export default {
           value: 'sell'
         }
       ],
-      coinInfo: {
-        title: '누적수익',
-        captions: '현재시세 1.0BTC = 85,000,000',
-        data: [
-          {
-            title: '채굴수익(BTC/원)',
-            text: '0.000258 bit (1,555,000 원)',
-          }, {
-            title: '추천수익(BTC/원)',
-            text: '0.000258 bit (1,555,000 원)',
-          }, {
-            title: '추천수익플러스(BTC/원)',
-            text: '0.000258 bit (1,555,000 원)',
-          }, {
-            title: '총계\n(BTC/원)',
-            text: '0.000258 bit (1,555,000 원)',
-          }, {
-            title: '수익률\n(누적수익+투자금액)',
-            text: '10%',
-          }
-        ]
-      },
-      sumInfo: {
-        title: '구매금액',
-        captions: '최초수익발생일: 2021년12월12일 / 30일경과',
-        data: [
-          {
-            title: '총구매수량\n(UNI point)',
-            text: '10,000'
-          },
-          {
-            title: '누적 투자액\n(원)',
-            text: '3,000,000'
-          }
-        ]
-      }
+
     };
   },
   computed: {
     ...mapState({
       loading: state => state.app.loading
-    })
+    }),
+    sellList() {
+      let arr = [];
+      if (this.getSort === 'all') return this.$store.state.account.uniPointList;
+      if (this.getSort === 'buy') {
+        arr = this.$store.state.account.uniPointList.filter(item => (item.sales_type === 'M'))
+      }
+      if (this.getSort === 'sell') {
+        arr = this.$store.state.account.uniPointList.filter(item => (item.sales_type !== 'M'))
+      }
+      if (!arr) arr = [];
+      return arr;
+    }
   },
   async mounted() {
+    // 현유니포인트 시세
     await this.$store.dispatch('account/fetchUniPointPrice');
+    // 보유 유니포인트
+    await this.$store.dispatch('account/fetchUniPointList', this.$store.state.auth.userInfo.user_id);
   },
   methods: {
     detailDialogEvent(val, item) {

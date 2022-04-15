@@ -23,8 +23,13 @@
                         </li>
                         <li class="">
                             <nuxt-link to="/shop/wishlist" class="ps-header__item"><i class="fa fa-bell-o"></i>
-                            <span class="badge">5</span></nuxt-link>
+                            <span class="badge">{{this.$store.state.auth.noticeCount}}</span></nuxt-link>
                         </li>
+                        <li class="">
+                          <div class="ps-main-menu">
+                          </div>
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -35,7 +40,7 @@
                     <nav class="ps-main-menu">
                     </nav>
                 </div>
-                <div class="ps-navigation__right">고객센터: <strong>02 - 1600 - 0174</strong></div>
+                <div class="ps-navigation__right">고객센터111: <strong>02 - 1600 - 0174</strong></div>
             </div>
         </div>
     </header>
@@ -54,7 +59,7 @@ export default {
             mainMenu: coinMenu,
             product: null,
             sticky: false,
-            showNavigation: false
+            showNavigation: true
         }
     },
     computed: {

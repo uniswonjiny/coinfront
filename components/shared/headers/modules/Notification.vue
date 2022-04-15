@@ -13,10 +13,6 @@
 
 <script>
 export default {
-    data() {
-        return {
-            show: true
-        };
-    }
+    props : ['show']
 };
 </script>

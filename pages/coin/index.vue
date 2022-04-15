@@ -36,8 +36,8 @@ export default {
             loading: state => state.app.loading
         })
     },
-    async mounted() {
-        this.$store.commit('app/setLoading', true);
+    mounted() {
+      this.$router.push('/coin/uniMining')
     },
 };
 </script>

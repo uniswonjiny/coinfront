@@ -25,7 +25,7 @@ import HeaderMobileCoin from '~/components/shared/mobile/headers/HeaderCoin';
 import Loading from '~/components/shared/Loading';
 
 export default {
-    // middleware: 'authentication',
+    middleware: 'authentication',
     components: {
         NavigationBottom,
         ScrollTop,
@@ -36,10 +36,12 @@ export default {
         Loading
     },
     created() {
+
         this.$store.commit('app/setLoading', true);
         this.$store.commit('app/setCurrentDrawerContent', null);
         this.$store.commit('app/setAppDrawer', false);
-    }
+    },
+
 };
 </script>
 

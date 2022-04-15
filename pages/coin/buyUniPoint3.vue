@@ -102,7 +102,7 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn block class="ps-btn ps-btn--primary" @click="$router.push('/coin/buyUniPoint1')">
+          <v-btn block class="ps-btn ps-btn--primary" @click="$router.push('/coin/uniPoint')">
             확인
           </v-btn>
         </v-card-actions>
@@ -173,7 +173,6 @@ export default {
       // this.$store.commit('app/setMessageNotify', message)
       // this.$store.commit('app/setDialogNotify', true);
       this.dialog = false;
-      this.confirm = true;
 
       const payload = {
         user_id: (this.$store.state.auth.userInfo && this.$store.state.auth.userInfo.user_id) ? this.$store.state.auth.userInfo.user_id : 'unicore',
@@ -181,7 +180,8 @@ export default {
         tax: this.$store.state.account.buyUniPoint.tax,
         uni_point: this.$store.state.account.buyUniPoint.uniPoint,
         document_type: this.selected1,
-        document_number: (this.selected1!=='N') ? this.regNumber : ''
+        document_number: (this.selected1!=='N') ? this.regNumber : '',
+        account_no: this.$store.state.account.unicoreAccount.no,
       }
 
       this.$axios.post('/account/buyUniPoint' , payload)

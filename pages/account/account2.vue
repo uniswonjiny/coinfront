@@ -44,7 +44,7 @@
                                 :type="show1 ? 'text' : 'password'"
                                 required
                                 rounded
-                                @click:append="show1 = !show1"
+                                @click.prevent:append="show1 = !show1"
                             />
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                                 required
                                 rounded
                                 :type="show2 ? 'text' : 'password'"
-                                @click:append="show2 = !show2"
+                                @click.prevent:append="show2 = !show2"
                             />
                         </div>
                     </div>
@@ -97,12 +97,12 @@
             </div>
         </div>
         <accountFooter
-            nextUrl="account-account3"
+            nextUrl="/account/account3"
             :disable="disable"
             :userId="this.unicoreId"
             :userPassword="this.password1"
             :recommendedId="this.recommendSendId" />
-        <accountInfoConfirm :userId="recommendedId" :userName="recommendedName" :dialog="accountDialog"/>
+        <accountInfoConfirm @closeEvent="accountCloseEvent" :userId="recommendedId" :userName="recommendedName" :dialog="accountDialog"/>
     </div>
 </template>
 
@@ -142,6 +142,9 @@ export default {
       }
     },
     methods: {
+      accountCloseEvent(){
+        this.accountDialog = false;
+      },
       idCheckEvent(){
         if(!this.unicoreId){
           this.$toast.info('아이디를 입력하세요.', { position: "top-left" })
@@ -179,6 +182,7 @@ export default {
             }
         }).catch(err=> {
           this.$toast.warning(`${err.message}`, { position: "top-left" })
+          this.accountDialog = false;
         })
       }
     },
