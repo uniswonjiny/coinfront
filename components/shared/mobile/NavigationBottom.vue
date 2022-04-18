@@ -21,7 +21,7 @@
             <nuxt-link to="/account/my-account"><i class="icon-user"></i></nuxt-link>
         </div>
         <div class="ps-nav__item">
-            <nuxt-link to="/shop/wishlist"
+            <nuxt-link to="/message"
                 ><i class="fa fa-heart-o"></i
                 ><span class="badge">{{
                     wishlistItems.length

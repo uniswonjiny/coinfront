@@ -19,8 +19,10 @@
                 <v-list-item @click="selectMessage(item.no)">
                   <template v-slot:default="{ active }">
                     <v-list-item-content>
-                      <v-list-item-title class="text-h5"> {{ item.title }}</v-list-item-title>
-                      <v-list-item-subtitle>({{ item.saw_flag === 1 ? '확인' : '미확인' }}) {{
+                      <v-list-item-title class="text-h5">
+
+                        {{ item.title }}</v-list-item-title>
+                      <v-list-item-subtitle> {{
                           item.created_at
                         }}
                       </v-list-item-subtitle>
@@ -28,9 +30,20 @@
                     <v-list-item-action>
                       <v-icon
                           color="grey lighten-1"
+                          v-if="item.saw_flag === 1"
                       >
                         mdi-message-outline
                       </v-icon>
+
+                      <v-chip
+                          v-else
+                          class="ma-2"
+                          color="red"
+                          text-color="white"
+                          small
+                      >
+                        NEW
+                      </v-chip>
                     </v-list-item-action>
                   </template>
                 </v-list-item>
@@ -48,23 +61,25 @@
         v-model="dialog"
         persistent
         max-width="290"
-
     >
-      <v-card>
-        <v-card-title class="text-h5">
-          {{ this.dialogInfo ? this.dialogInfo.title : '' }}
-        </v-card-title>
-        <v-card-text>{{ this.dialogInfo ? this.dialogInfo.content : '' }}</v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-              color="green darken-1"
-              text
-              @click="confirmEvent"
-          >
-            {{ this.dialogInfo && this.dialogInfo.saw_flag === 0 ? '확인' : '닫기' }}
-          </v-btn>
-        </v-card-actions>
+      <v-card color="deep-purple lighten-5" >
+            <v-card-text class="text-center text-h5 font-weight-black py-3">
+              {{ this.dialogInfo ? this.dialogInfo.title : '' }}
+            </v-card-text>
+            <v-card-text class="text-center">{{ this.dialogInfo ? this.dialogInfo.content : '' }}</v-card-text>
+
+            <v-card-actions>
+              <v-btn
+                  block
+                  @click="confirmEvent"
+              >
+                {{ this.dialogInfo && this.dialogInfo.saw_flag === 0 ? '확인' : '닫기' }}
+              </v-btn>
+            </v-card-actions>
+
+
+
+
       </v-card>
     </v-dialog>
   </div>
@@ -127,7 +142,11 @@ export default {
     confirmEvent(){
       if(this.dialogInfo && this.dialogInfo.saw_flag === 0){
         this.$store.dispatch('auth/messageListSaw',this.dialogInfo.no )
-            .then(_=> this.dialog=false)
+            .then(_=> {
+              this.dialog=false
+              this.$store.dispatch('auth/fetchMessageList');
+            }
+      )
       } else {
         this.dialog=false
       }
