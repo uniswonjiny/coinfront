@@ -45,7 +45,6 @@
         <v-spacer/>
         <v-btn outlined color="red" @click="emitEvent(true)">출금실행</v-btn>
       </v-card-actions>
-
     </v-card>
   </v-dialog>
 </template>

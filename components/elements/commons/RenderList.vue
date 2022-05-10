@@ -15,20 +15,21 @@
       <span class="sub-toggle" v-if="item.subMenu || item.megaContent">
                 <i class="fa fa-chevron-down"></i>
             </span>
-      <render-list v-if="item.subMenu" :list="item.subMenu" :className="item.subClass" />
+      <render-list v-if="item.subMenu" :list="item.subMenu" :className="item.subClass"/>
       <div class="mega-menu" v-else-if="item.megaContent">
         <div class="container">
           <div class="mega-menu__widget" v-if="item.home">
-            <menu-mega-image :data-list="item.megaContent" />
+            <menu-mega-image :data-list="item.megaContent"/>
           </div>
           <div class="mega-menu__row" v-else>
-            <div v-for="(val, indexVal) in item.megaContent" :class="['mega-menu__column', val.megaColumn && val.megaColumn]">
+            <div v-for="(val, indexVal) in item.megaContent"
+                 :class="['mega-menu__column', val.megaColumn && val.megaColumn]">
               <template v-if="val.heading">
                 <h4>{{ val.heading }}</h4>
               </template>
             </div>
           </div>
-          <branch :branchs="branchs" v-if="item.branch" />
+          <branch :branchs="branchs" v-if="item.branch"/>
         </div>
       </div>
     </li>
@@ -37,9 +38,8 @@
 
 <script>
 import Branch from '~/components/elements/commons/Branch';
-import { branchDefault } from '~/static/data/common.json';
-import { navPromo } from '~/static/data/menu.json';
-import CountDown from '~/components/elements/commons/CountDown';
+import {branchDefault} from '~/static/data/common.json';
+import {navPromo} from '~/static/data/menu.json';
 import MenuMegaImage from '~/components/elements/menu/MenuMegaImage';
 
 export default {
@@ -59,10 +59,11 @@ export default {
     },
     product: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
-  components: { Branch, CountDown, MenuMegaImage },
+  components: {Branch, MenuMegaImage},
   data() {
     return {
       branchs: branchDefault,

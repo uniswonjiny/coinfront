@@ -1,20 +1,38 @@
 export const state = () => ({
+    // 유니포인트 구매 정보
     buyUniPoint: {
         money: 0,
         tax: 0,
         uniPoint: 0
     },
-    // 유니포인트 구매 정보
+    // 유니코아 계좌정보
     unicoreAccount: {
         bank_name: '우리은행',
         account_no: '12345-56-5478940',
         account_holder: '유니코아1',
         no: 1
     },
-    // 유니코아 계좌정보
     uniPointPrice: 0,
     uniPointList: [],
+    // 최종 확정된 사용자의 포인트금액
     uniPointSum: 0,
+    uniPointInfo: {
+        uni_point: 0,
+        btc_point: 0,
+        money: 0
+    },
+    // 판매요청중인 사용자 포인트금액
+    sellRSumInfo: {
+        uni_point: 0,
+        btc_point: 0,
+        money: 0
+    },
+    // 구매요청중인 사용자 포인트내용
+    buyRSumInfo: {
+        uni_point: 0,
+        btc_point: 0,
+        money: 0
+    },
     // 비트코인시세
     bitCoinCurrent: {search_time: null, one_price: 0},
     // 사용자의 누적수입
@@ -26,11 +44,11 @@ export const state = () => ({
     // 사용자 코인갯수
     userBitCoinListCount: 0,
     // 사용자 코인목록페이지 정렬코드
-    userBitCoinListSort : '',
+    userBitCoinListSort: '',
     // 시용자별 코인누적수익금액
-    userCoinBenefit : [],
+    userCoinBenefit: [],
     // 사용자별 유니포인트 정보(보유포인트, 금액)
-    userUniPointInfo : {uni_point:0, money:0},
+    userUniPointInfo: {uni_point: 0, money: 0},
     // 회사의 수수료율 목록
     rootFeeList: []
 });
@@ -50,6 +68,15 @@ export const mutations = {
     setUniPointSum(state, val) {
         state.uniPointSum = val;
     },
+    setUniPointInfo(state, info) {
+        state.uniPointInfo = info;
+    },
+    setSellRSumInfo(state, info) {
+        state.sellRSumInfo = info;
+    },
+    setBuyRSumInfo(state, info) {
+        state.buyRSumInfo = info;
+    },
     setBitCoinCurrent(state, info) {
         state.bitCoinCurrent = info
     },
@@ -62,13 +89,15 @@ export const mutations = {
     setUserBitCoinBalance(state, val) {
         state.userBitCoinBalance = val;
     },
-    setUserBitCoinList(state, list) {
-        const targetList = list.filter(item => {
-            if(!state.userBitCoinList.find(item2 => item.no === item2.no)){
-                return item;
-            }
-        })
-        state.userBitCoinList = state.userBitCoinList.concat(targetList);
+    setUserBitCoinList(state, list, start_num) {
+        if (start_num !== 0) {
+            const targetList = list.filter(item => {
+                if (!state.userBitCoinList.find(item2 => item.no === item2.no)) {
+                    return item;
+                }
+            })
+            state.userBitCoinList = state.userBitCoinList.concat(targetList);
+        } else state.userBitCoinList = list
     },
     setUserBitCoinListCount(state, val) {
         state.userBitCoinListCount = val
@@ -83,17 +112,17 @@ export const mutations = {
     setUserUniPointInfo(state, info) {
         state.userUniPointInfo = info;
     },
-    setRootFeeList(state, list){
+    setRootFeeList(state, list) {
         state.rootFeeList = list;
     }
 };
 
 export const actions = {
     // 사용자별 누적 코인수익확인
-    fetchUserCoinBenefit({commit}){
+    fetchUserCoinBenefit({commit}) {
         this.$axios.post('/account/getBenefit', {user_no: this.state.auth.userInfo.user_no})
             .then(res => {
-                commit('setUserCoinBenefit' , res.data)
+                commit('setUserCoinBenefit', res.data)
             })
     },
 
@@ -116,6 +145,9 @@ export const actions = {
         this.$axios.get(`/account/uniPointList/${userId}`)
             .then((res) => {
                 commit('setUniPointSum', res.data.userSumInfo.uni_point);
+                commit('setUniPointInfo', res.data.userSumInfo);
+                commit('setSellRSumInfo', res.data.sellRSumInfo);
+                commit('setBuyRSumInfo', res.data.buyRSumInfo);
                 commit('setUniPointList', res.data.userPointList);
             })
     },
@@ -159,7 +191,7 @@ export const actions = {
             user_no: this.state.auth.userInfo.user_no
         })
             .then((res) => {
-                commit('setUserBitCoinList', res.data.list);
+                commit('setUserBitCoinList', res.data.list, start_num);
                 commit('setUserBitCoinListCount', res.data.count);
             })
     },
@@ -174,7 +206,7 @@ export const actions = {
             })
     },
     // 회사의 수수료율 목록
-    fetchRootFeeList({commit}){
+    fetchRootFeeList({commit}) {
         this.$axios.get(`/com/settingFeeList`)
             .then((res) => {
                 commit('setRootFeeList', res.data);

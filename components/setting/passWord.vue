@@ -114,7 +114,7 @@ export default {
         return this.$toast.error(`신규 비밀번호에 문제가 있습니다.`, {position: "top-left"})
       }
       this.$axios.post('/auth/updatePassword', {
-        user_id : this.$store.state.auth.userInfo.user_id,
+        user_id: this.$store.state.auth.userInfo.user_id,
         old_password: this.password,
         new_password: this.newPassword1
       }).then(

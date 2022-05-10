@@ -24,7 +24,9 @@
               </div>
               <div class="col-6">
                 <div class="ps-delivery__item text-right">
-                  {{ (this.$store.state.account.buyUniPoint.tax) ? this.$store.state.account.buyUniPoint.tax.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0 }}
+                  {{
+                    (this.$store.state.account.buyUniPoint.tax) ? this.$store.state.account.buyUniPoint.tax.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0
+                  }}
                   원
                 </div>
               </div>
@@ -35,11 +37,12 @@
               </div>
               <div class="col-6" :style="{'background-color':'white'}">
                 <div class="ps-delivery__item text-right">
-                  {{ (this.$store.state.account.buyUniPoint.money + this.$store.state.account.buyUniPoint.tax).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
+                  {{
+                    (this.$store.state.account.buyUniPoint.money + this.$store.state.account.buyUniPoint.tax).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }}
                   원
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -104,7 +107,6 @@ export default {
           text: 'UNI Point 구매(2/3)'
         }
       ],
-
     };
   },
   computed: {
@@ -119,10 +121,6 @@ export default {
     nextHandler() {
       this.$router.push("/coin/buyUniPoint3");
     },
-    handleFilter(type, value) {
-      // list type: price, color, branch, rating
-      console.log(type, value);
-    }
   }
 };
 </script>

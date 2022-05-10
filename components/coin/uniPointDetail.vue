@@ -13,7 +13,7 @@
     <v-dialog v-model="dialog" max-width="600">
       <v-card flat class="mb-0 pb-0">
         <v-app-bar flat dense dark color="#103178">
-          No: {{item.no}}
+          No: {{ item.no }}
           <v-spacer/>
           <v-btn
               color="white"
@@ -29,16 +29,14 @@
               <v-icon>mdi-square-small</v-icon>
               거래유형
             </v-col>
-            <v-col cols="7" class="text-right">Uni Point {{item.title}}
+            <v-col cols="7" class="text-right">Uni Point {{ item.title }}
             </v-col>
-
 
             <v-col cols="5">
               <v-icon>mdi-square-small</v-icon>
               요청일시
             </v-col>
             <v-col cols="7" class="text-right"> {{ item.created_at }}</v-col>
-
 
             <v-col cols="5">
               <v-icon>mdi-square-small</v-icon>
@@ -96,8 +94,8 @@
               거래증빙
             </v-col>
             <v-col cols="7" class="text-right">
-              <div>{{item.documentType }}</div>
-              <div>{{item.document_number }}</div>
+              <div>{{ item.documentType }}</div>
+              <div>{{ item.document_number }}</div>
               <!--                                <v-btn text color="primary" @click="cashDialog=true">[출력]</v-btn>-->
             </v-col>
           </v-row>
@@ -118,7 +116,7 @@ export default {
   computed: {
     item() {
       let item = {
-        title : '',
+        title: '',
         perCurrency: 0,
         sumCurrency: 0,
         created_at: '',
@@ -126,23 +124,20 @@ export default {
         documentType: '',
 
       };
-      if(!this.info) return item
+      if (!this.info) return item
       item = this.info;
       item.sales_type === 'M' ? item.title = '구매' : item.title = '판매';
 
-      if(item.type === 'R'){
-        item.title =item.title + ' - 요청중';
-        item.updated_time = '미처리'; // updated_at 이름을 그대로 사용할 경우 알수 없는 예러가 발생한다. 내부적으로 updated_at 이름으로 사용되는 것이 ㅇ존재하는듯
+      if (item.type === 'R') {
+        item.title = item.title + ' - 요청중';
+        item.updated_time = '미처리'; // updated_at 이름을 그대로 사용할 경우 알수 없는 예러가 발생한다. 이름변경후 오류없음
       } else {
         item.updated_time = item.updated_at
       }
 
       // document_type 그래도 상요할경우 에러남
-      if(item.document_type === 'E') item.documentType  = '지출증빙';
-      if(item.document_type === 'I') item.documentType  = '소득공제';
-
-
-
+      if (item.document_type === 'E') item.documentType = '지출증빙';
+      if (item.document_type === 'I') item.documentType = '소득공제';
 
       // 거래단가
       item.perCurrency = commaCurrency(item.money / item.uni_point) + '원';

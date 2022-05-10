@@ -37,7 +37,7 @@
             dark
             color="warning"
             rounded
-            @click="$router.push('/coin/btcPointSell')"
+            @click="$store.state.account.userBitCoinBalance > 0 ? $router.push('/coin/btcPointSell') : $toast.warning('잔고를 확인하세요', { position: 'top-left' })"
         >
           수익출금
         </v-btn>
@@ -100,7 +100,7 @@ export default {
   },
   data() {
     return {
-      pageSize : 4,
+      pageSize: 4,
       breadcrumb: [
         {
           url: '/coin/uniMining',
@@ -140,21 +140,19 @@ export default {
     this.$store.commit('app/setLoading', true);
     // 비트코인 시세확인
     await this.$store.dispatch('account/fetchBitCoinCurrent');
-    if (this.$store.state.account.userBitCoinList.length == 0) {
-      // 누적수익확인
-      await this.$store.dispatch('account/fetchUserBtcSum');
-      // 코인잔고
-      await this.$store.dispatch('account/fetchUserBtcBalance');
-      // 사용자의 코인입출금내역
-      await this.$store.dispatch('account/fetchUserCoinList', {size: this.pageSize, start_num: 0});
-    }
 
+    // 누적수익확인
+    await this.$store.dispatch('account/fetchUserBtcSum');
+    // 코인잔고
+    await this.$store.dispatch('account/fetchUserBtcBalance');
+    // 사용자의 코인입출금내역
+    await this.$store.dispatch('account/fetchUserCoinList', {size: this.pageSize, start_num: 0});
   },
   methods: {
-    searchEvent(startNum){
+    searchEvent(startNum) {
       this.$store.commit('account/setUserBitCoinSort', this.getSort)
-      if(startNum !== 0) {
-        startNum =  this.$store.state.account.userBitCoinList.length;
+      if (startNum !== 0) {
+        startNum = this.$store.state.account.userBitCoinList.length;
       } else {
         this.$store.commit('account/setUserBitCoinListEmpty')
       }

@@ -59,25 +59,28 @@
         </v-app-bar>
         <v-card-text>
           <p class="text-subtitle-2 font-weight-black " :style="{'color': '#103178'}">
-            <v-icon :style="{'color': '#103178'}">mdi-check-circle</v-icon> 최종 구매 금액(부가세 포함)
+            <v-icon :style="{'color': '#103178'}">mdi-check-circle</v-icon>
+            최종 구매 금액(부가세 포함)
           </p>
           <div class="text-h4 text-center font-weight-black" :style="{'color': '#FD8D27'}">
-            {{ (this.$store.state.account.buyUniPoint.money + this.$store.state.account.buyUniPoint.tax).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }} 원
+            {{
+              (this.$store.state.account.buyUniPoint.money + this.$store.state.account.buyUniPoint.tax).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }} 원
           </div>
         </v-card-text>
 
         <v-card-actions>
 
-            <v-col>
-              <v-btn class="ps-btn ps-btn--warning" @click.prevent="dialog=!dialog">
-                아니오
-              </v-btn>
-            </v-col>
-            <v-col>
-              <v-btn class="ps-btn ps-btn--primary" @click.prevent="confirmEvent">
-                예
-              </v-btn>
-            </v-col>
+          <v-col>
+            <v-btn class="ps-btn ps-btn--warning" @click.prevent="dialog=!dialog">
+              아니오
+            </v-btn>
+          </v-col>
+          <v-col>
+            <v-btn class="ps-btn ps-btn--primary" @click.prevent="confirmEvent">
+              예
+            </v-btn>
+          </v-col>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -97,7 +100,8 @@
         </v-app-bar>
         <v-card-text class="mt-5">
           <div class="text-subtitle-1 font-weight-black " :style="{'color': '#103178'}">
-            <v-icon :style="{'color': '#103178'}">mdi-check-circle</v-icon> 구매신청이 완료되었습니다.
+            <v-icon :style="{'color': '#103178'}">mdi-check-circle</v-icon>
+            구매신청이 완료되었습니다.
           </div>
         </v-card-text>
 
@@ -180,21 +184,15 @@ export default {
         tax: this.$store.state.account.buyUniPoint.tax,
         uni_point: this.$store.state.account.buyUniPoint.uniPoint,
         document_type: this.selected1,
-        document_number: (this.selected1!=='N') ? this.regNumber : '',
+        document_number: (this.selected1 !== 'N') ? this.regNumber : '',
         account_no: this.$store.state.account.unicoreAccount.no,
       }
 
-      this.$axios.post('/account/buyUniPoint' , payload)
-      .then(res => {
-        this.confirm = true;
-
-      }).catch(err => this.$toast.error(`${err}`,{ position: "top-left" }))
-
+      this.$axios.post('/account/buyUniPoint', payload)
+          .then(res => {
+            this.confirm = true;
+          }).catch(err => this.$toast.error(`${err}`, {position: "top-left"}))
     },
-    handleFilter(type, value) {
-      // list type: price, color, branch, rating
-      console.log(type, value);
-    }
   }
 };
 </script>

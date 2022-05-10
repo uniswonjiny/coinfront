@@ -1,19 +1,19 @@
 <template>
-    <client-only>
-        <v-app>
-            <nuxt></nuxt>
-        </v-app>
-    </client-only>
+  <client-only>
+    <v-app>
+      <nuxt></nuxt>
+    </v-app>
+  </client-only>
 </template>
 
 <script>
 
 
 export default {
-    created() {
-        this.$store.commit('app/setLoading', true);
+  created() {
+    this.$store.commit('app/setLoading', true);
 
-    },
+  },
 };
 </script>
 

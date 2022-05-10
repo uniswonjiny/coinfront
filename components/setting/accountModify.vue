@@ -109,12 +109,6 @@ export default {
     this.bank_account = '';
     this.bank_holder = '';
   },
-
-  computed: {
-    searchFlag() {
-      return !(this.accountNumber && this.bankCode)
-    }
-  },
   data() {
     return {
       bankList: [
@@ -145,8 +139,9 @@ export default {
         bank_holder: this.bank_holder,
         user_id: this.$store.state.auth.userInfo.user_id
       }).then(res => {
+        this.$store.dispatch('auth/authLogin')
         this.$toast.success(`변경되었습니다.`, {position: "top-left"})
-        return Promise.resolve()
+        return res
       }).then(_ => {
         this.$emit('closeEvent');
       })

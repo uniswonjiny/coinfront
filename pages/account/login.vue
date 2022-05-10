@@ -47,12 +47,11 @@
               <button class="ps-btn ps-btn--warning" @click="loginEvent()">
                 로그인
               </button>
-
             </div>
             <div class="text-right">
-<!--              <nuxt-link class="ps-account__link mr-3" to="/account/findPassWord">
-                비밀번호 찾기
-              </nuxt-link>-->
+              <!--              <nuxt-link class="ps-account__link mr-3" to="/account/findPassWord">
+                              비밀번호 찾기
+                            </nuxt-link>-->
               <nuxt-link class="ps-account__link" to="/account/account2">
                 회원가입
               </nuxt-link>
@@ -96,7 +95,6 @@ export default {
           .then(() => {
             this.$router.push('/coin');
           })
-
     }
   }
 };

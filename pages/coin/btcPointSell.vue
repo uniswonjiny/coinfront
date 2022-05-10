@@ -13,7 +13,6 @@
                 </div>
                 <div class="col-7 text-right ">
                   <h4 class="">{{ bitCoinBalance }}<sub>BTC</sub></h4>
-
                 </div>
               </div>
               <div class="row">
@@ -58,6 +57,7 @@
                         dense
                         hide-details
                         single-line
+                        type="number"
                         suffix="BTC"
                         v-model="coinAmount"
                         @blur="coinAmountchecked"
@@ -117,9 +117,9 @@
                   <div class="subtitle-2">입금계좌</div>
                 </div>
                 <div class="col-9 text-right">
-                  <div class="body-2"><sub>{{ this.$store.state.account.unicoreAccount.bank_name }}</sub>
-                    {{ this.$store.state.account.unicoreAccount.account_no }}
-                    <sub>{{ this.$store.state.account.unicoreAccount.account_holder }}</sub></div>
+                  <div class="body-2"><sub>{{ this.$store.state.auth.userInfo.bank_name }}</sub>
+                    {{ this.$store.state.auth.userInfo.bank_account }}
+                    <sub>{{ this.$store.state.auth.userInfo.bank_holder }}</sub></div>
                 </div>
               </div>
             </div>
@@ -144,7 +144,6 @@
     <v-divider/>
     <!-- 모달창 -->
     <SellBtcConfirm :dialog="dialog" :btcValue="coinAmount" :money="depositAmountComma" @emitEvent="emitConfirmEvent"/>
-
   </div>
 </template>
 
@@ -219,8 +218,6 @@ export default {
     }),
     confirmFlag() {
       return this.depositAmount < 1000;
-
-
     },
     withdrawalComma() {
       return commaCurrency(this.withdrawal);
@@ -294,10 +291,23 @@ export default {
       }
     },
     emitConfirmEvent(dialogFlag, confirmFlag) {
-
       this.dialog = dialogFlag;
       if (confirmFlag) {
-        console.log('서버로 보내자아!')
+        // sellBtcUser
+        this.$axios.post('/account/sellBtcUser', {
+          user_no: this.$store.state.auth.userInfo.user_no, // 사용자 번호
+          resaleFee: this.resaleFee, // 환매 수수료
+          withdrawal: this.withdrawal, // 송금수수료
+          depositAmount: this.withdraw, // 출금요청금액
+          coinAmount: this.coinAmount, // 환매요청 코인수
+          bankName: this.$store.state.auth.userInfo.bank_name, // 출금신청 은행이름
+          accountNo: this.$store.state.auth.userInfo.bank_account, // 계좌번호
+          accountHolder: this.$store.state.auth.userInfo.bank_holder // 계좌주(이름)
+        })
+            .then(_ => this.$store.dispatch('account/fetchUserBtcBalance'))
+            .catch(_ => {
+              this.$toast.error(`출금요청에 문제가 있습니다. 고객센터에 문의하세요`, {position: "top-left"})
+            })
       }
     }
   }

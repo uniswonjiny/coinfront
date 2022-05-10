@@ -16,38 +16,39 @@
                   active-class="pink--text"
               >
                 <template v-for="(item, index) in list">
-                <v-list-item @click="selectMessage(item.no)">
-                  <template v-slot:default="{ active }">
-                    <v-list-item-content>
-                      <v-list-item-title class="text-h5">
+                  <v-list-item @click="selectMessage(item.no)">
+                    <template v-slot:default="{ active }">
+                      <v-list-item-content>
+                        <v-list-item-title class="text-h5">
 
-                        {{ item.title }}</v-list-item-title>
-                      <v-list-item-subtitle> {{
-                          item.created_at
-                        }}
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                      <v-icon
-                          color="grey lighten-1"
-                          v-if="item.saw_flag === 1"
-                      >
-                        mdi-message-outline
-                      </v-icon>
+                          {{ item.title }}
+                        </v-list-item-title>
+                        <v-list-item-subtitle> {{
+                            item.created_at
+                          }}
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                      <v-list-item-action>
+                        <v-icon
+                            color="grey lighten-1"
+                            v-if="item.saw_flag === 1"
+                        >
+                          mdi-message-outline
+                        </v-icon>
 
-                      <v-chip
-                          v-else
-                          class="ma-2"
-                          color="red"
-                          text-color="white"
-                          small
-                      >
-                        NEW
-                      </v-chip>
-                    </v-list-item-action>
-                  </template>
-                </v-list-item>
-                <v-divider/>
+                        <v-chip
+                            v-else
+                            class="ma-2"
+                            color="red"
+                            text-color="white"
+                            small
+                        >
+                          NEW
+                        </v-chip>
+                      </v-list-item-action>
+                    </template>
+                  </v-list-item>
+                  <v-divider/>
                 </template>
               </v-list-item-group>
             </v-list>
@@ -56,30 +57,24 @@
       </div>
     </div>
 
-
     <v-dialog
         v-model="dialog"
         persistent
         max-width="290"
     >
-      <v-card color="deep-purple lighten-5" >
-            <v-card-text class="text-center text-h5 font-weight-black py-3">
-              {{ this.dialogInfo ? this.dialogInfo.title : '' }}
-            </v-card-text>
-            <v-card-text class="text-center">{{ this.dialogInfo ? this.dialogInfo.content : '' }}</v-card-text>
-
-            <v-card-actions>
-              <v-btn
-                  block
-                  @click="confirmEvent"
-              >
-                {{ this.dialogInfo && this.dialogInfo.saw_flag === 0 ? '확인' : '닫기' }}
-              </v-btn>
-            </v-card-actions>
-
-
-
-
+      <v-card color="deep-purple lighten-5">
+        <v-card-text class="text-center text-h5 font-weight-black py-3">
+          {{ this.dialogInfo ? this.dialogInfo.title : '' }}
+        </v-card-text>
+        <v-card-text class="text-center">{{ this.dialogInfo ? this.dialogInfo.content : '' }}</v-card-text>
+        <v-card-actions>
+          <v-btn
+              block
+              @click="confirmEvent"
+          >
+            {{ this.dialogInfo && this.dialogInfo.saw_flag === 0 ? '확인' : '닫기' }}
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
@@ -92,7 +87,6 @@ import Breadcrumb from '~/components/elements/commons/Breadcrumb';
 import CoinMessageList from '~/components/elements/commons/CoinMessageList';
 import {mapState} from 'vuex';
 
-
 export default {
   layout: 'coin',
   components: {
@@ -102,7 +96,7 @@ export default {
   data() {
     return {
       dialog: false,
-      dialogInfo : null,
+      dialogInfo: null,
       breadcrumb: [
         {
           url: '/coin/uniMining',
@@ -134,21 +128,21 @@ export default {
     this.$store.commit('app/setLoading', true);
   },
   methods: {
-    selectMessage(index){
+    selectMessage(index) {
       console.log(index)
-      this.dialogInfo = this.list.filter(item=> item.no == index)[0];
+      this.dialogInfo = this.list.filter(item => item.no == index)[0];
       this.dialog = true;
     },
-    confirmEvent(){
-      if(this.dialogInfo && this.dialogInfo.saw_flag === 0){
-        this.$store.dispatch('auth/messageListSaw',this.dialogInfo.no )
-            .then(_=> {
-              this.dialog=false
-              this.$store.dispatch('auth/fetchMessageList');
-            }
-      )
+    confirmEvent() {
+      if (this.dialogInfo && this.dialogInfo.saw_flag === 0) {
+        this.$store.dispatch('auth/messageListSaw', this.dialogInfo.no)
+            .then(_ => {
+                  this.dialog = false
+                  this.$store.dispatch('auth/fetchMessageList');
+                }
+            )
       } else {
-        this.dialog=false
+        this.dialog = false
       }
     }
   }

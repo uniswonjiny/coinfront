@@ -16,7 +16,9 @@
                   </div>
                   <div class="col-5">
                     <div class="ps-delivery__item text-right">
-                      {{ (this.$store.state.account.uniPointPrice) ? this.$store.state.account.uniPointPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0 }}
+                      {{
+                        (this.$store.state.account.uniPointPrice) ? this.$store.state.account.uniPointPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0
+                      }}
                       원
                     </div>
                   </div>
@@ -39,7 +41,9 @@
               <div class="ps-product__info my-0">
                 <div class="ps-product__quantity">
                   <h6>구매금액<sub>(구매단위
-                    {{ (this.$store.state.account.uniPointPrice) ? this.$store.state.account.uniPointPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0 }}
+                    {{
+                      (this.$store.state.account.uniPointPrice) ? this.$store.state.account.uniPointPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0
+                    }}
                     원)</sub></h6>
                   <div class="align-items-center">
                     <div class="def-number-input number-input safari_only">
@@ -79,9 +83,7 @@
             >
               다음
             </button>
-
           </div>
-
         </div>
         <v-divider/>
       </div>
@@ -138,12 +140,7 @@ export default {
         this.$router.push("/coin/buyUniPoint2");
 
       } else this.$toast.error('구매포인트를 정해주세요', {position: "top-left"})
-    },
-    handleFilter(type, value) {
-      // list type: price, color, branch, rating
-      console.log(type, value);
-    },
-
+    }
   }
 };
 </script>

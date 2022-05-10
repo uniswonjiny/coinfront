@@ -102,7 +102,7 @@ export default {
         host: 'localhost'
     },
     axios : {
-        browserBaseURL: process.env.NODE_ENV === 'production' ? 'https://api.swonjiny.co.kr/api' : 'http://localhost/api',
+        browserBaseURL: process.env.NODE_ENV === 'production' ? 'https://api.swonjiny.kr/api' : 'http://localhost/api',
         baseURL: process.env.NODE_ENV === 'production' ? 'https://api.swonjiny.co.kr/api' : 'http://localhost/api',
         https: process.env.NODE_ENV === 'production' ? true : false,
         credentials : false

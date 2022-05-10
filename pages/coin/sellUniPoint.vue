@@ -5,7 +5,20 @@
     <div class="card border-0" :style="{'backgroundColor':'#103178' , 'color': 'white'}">
       <div class="card-body">
         <div class="row">
-          <div class="col-5 col-sm-3">잔고</div>
+          <div class="col-5 col-sm-3">보유포인트</div>
+          <div class="col-4 col-sm-7 col-md-8 text-right">{{
+              this.$store.state.account.userUniPointInfo.uni_point
+            }}
+          </div>
+          <div class="col-3 col-sm-2 col-md-1 text-right">UNIp</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-sm-3">판매요청중</div>
+          <div class="col-4 col-sm-7 col-md-8 text-right">{{ this.$store.state.account.sellRSumInfo.uni_point }}</div>
+          <div class="col-3 col-sm-2 col-md-1 text-right">UNIp</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-sm-3">판매가능</div>
           <div class="col-4 col-sm-7 col-md-8 text-right">{{ userUniPoint }}</div>
           <div class="col-3 col-sm-2 col-md-1 text-right">UNIp</div>
         </div>
@@ -97,6 +110,7 @@
         <button
             type="button"
             class="ps-btn ps-btn--warning"
+            @click="clickEvent"
         >
           판매요청
         </button>
@@ -122,7 +136,9 @@ export default {
   computed: {
     ...mapState({
       loading: state => state.app.loading,
-      userUniPoint: state => state.account.userUniPointInfo.uni_point,
+      userUniPoint: state => {
+        return state.account.userUniPointInfo.uni_point - state.account.sellRSumInfo.uni_point
+      }
     }),
     sellPrice() {
       if (isNaN(this.sellPoint)) this.sellPoint = 0;
@@ -134,7 +150,6 @@ export default {
     resaleFeePrice() {
       let returnVal = 0;
       let fee = 0.0;
-
       for (const el of this.$store.state.account.rootFeeList) {
         if (el.detail_type === 'resale') {
           fee = el.value;
@@ -163,6 +178,23 @@ export default {
         }
       ],
       sellPoint: 0,
+    }
+  },
+  methods: {
+    clickEvent() {
+      if (this.sellPoint === 0 || isNaN(this.sellPoint)) {
+        this.$toast.error(`판매포인트를 확인하세요`, {position: "top-left"})
+        return
+      }
+      this.$axios.post('/account/sellUniPoint', {
+        user_no: this.$store.state.auth.userInfo.user_no,
+        money: this.depositAmount,
+        tax: this.resaleFeePrice,
+        uni_point: this.sellPoint
+      }).then(_ => {
+        this.$store.dispatch('account/fetchUniPointList', this.$store.state.auth.userInfo.user_id)
+        this.$toast.success(`판매요청되었습니다.`, {position: "top-left"})
+      })
     }
   }
 }

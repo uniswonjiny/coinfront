@@ -21,7 +21,6 @@
               <div class="col-3">
                 <h6>구매금액</h6>
               </div>
-
             </div>
             <table-oriented :dataList="uniBuyList" class="my-0"/>
           </div>
@@ -63,30 +62,31 @@ export default {
       loading: state => state.app.loading,
       coinPrice: state => commaCurrency(state.account.bitCoinCurrent.one_price),
       coinSearchTime: state => state.account.bitCoinCurrent.search_time,
-      uniBuyList: state =>{
+      uniBuyList: state => {
         return [
-          {title: '총구매수량\n(UNI point)' , text : commaCurrency(state.account.userUniPointInfo.uni_point)},
-          {title: '누적 투자액\n(원)' , text : commaCurrency(state.account.userUniPointInfo.money)}
+          {title: '총구매수량\n(UNI point)', text: commaCurrency(state.account.userUniPointInfo.uni_point + ' Uni')},
+          {title: '누적 투자액\n(원)', text: commaCurrency(state.account.userUniPointInfo.money) + ' 원'}
         ]
       },
       coinBeneFitList: state => {
-        let sumCoin = 0.0;
+        let sumCoin = 0;
 
         const retArr = state.account.userCoinBenefit.map(item => {
-          const currency = Math.floor(state.account.bitCoinCurrent.one_price * item.coin_value * 100) / 100
+          const currency = commaCurrency(Math.floor(state.account.bitCoinCurrent.one_price * item.coin_value))
           sumCoin = Number(sumCoin) + Number(item.coin_value);
           sumCoin = Math.floor(sumCoin * 100000000) / 100000000
           return {title: item.type_string, text: item.coin_value + 'BIT (' + currency + '원)'}
         })
         // 총합금액
-        const calcPrice = Math.floor(sumCoin * state.account.bitCoinCurrent.one_price)
-
+        let calcPrice = Math.floor(sumCoin * state.account.bitCoinCurrent.one_price)
+        if (!calcPrice || isNaN(calcPrice) || calcPrice === 0) calcPrice = 0;
+        else calcPrice = calcPrice * 100 / state.account.userUniPointInfo.money;
+        calcPrice = Math.floor(calcPrice);
         const sumBenefit = [
-
           {title: '총계', text: sumCoin + 'BIT (' + calcPrice + '원)'},
           {
             title: '수익률(누적수익/투자금액)',
-            text:  Number(calcPrice) *100 / Number(state.account.userUniPointInfo.money) +'%'
+            text: calcPrice + '%'
           }
         ]
         const lastArr = [...retArr, ...sumBenefit]
@@ -101,7 +101,6 @@ export default {
     this.$store.dispatch('account/fetchUserCoinBenefit');
     // 고객이 보유한 포인트 정보
     this.$store.dispatch('account/fetchUserUniPointInfo');
-
   },
   methods: {}
 };

@@ -68,7 +68,8 @@
       <div class="container">
         <div class="row m-0">
           <div class="col-12 p-0">
-            <p class="text-center"><a class="ps-footer__link" @click="confirmEvent" to="#"><i class="icon-wallet"></i>{{buttonString}}</a>
+            <p class="text-center"><a class="ps-footer__link" @click="confirmEvent" to="#"><i
+                class="icon-wallet"></i>{{ buttonString }}</a>
             </p>
           </div>
         </div>
@@ -124,7 +125,7 @@ export default {
       this.inputAll = (this.input1 && this.input2 && this.input3)
     },
     confirmEvent() {
-      if(this.buttonString === '로그인') {
+      if (this.buttonString === '로그인') {
         return this.$router.push('/')
       }
       if (this.inputAll && this.userId && this.userPassword) {
@@ -143,7 +144,7 @@ export default {
         }).then(res => {
           this.$toast.success(`가입되었습니다. 로그인후 이용하세요`, {position: "top-left"});
           this.buttonString = '로그인'
-        }).catch(e =>{
+        }).catch(e => {
           this.$toast.error(`가입중 문제가 발생했습니다.`, {position: "top-left"})
         })
 

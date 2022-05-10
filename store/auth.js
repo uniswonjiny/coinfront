@@ -25,12 +25,25 @@ export const mutations = {
 };
 
 export const actions = {
-    async login({commit, state}, {user_id, user_password}) {
+    async login({commit}, {user_id, user_password}) {
         try {
             const res = await this.$axios.post('/auth/loginInfo', {
                 user_id,
                 user_password
             })
+            const {userInfo, authKey} = await res.data;
+            await commit('setIsLoggedIn', true);
+            await commit('setUserInfo', userInfo);
+            await commit('setAccessToken', authKey);
+            await localStorage.setItem("authKey", authKey);
+        } catch (e) {
+            this.$toast.error(`${e.message}`, {position: "top-left"})
+        }
+    },
+
+    async authLogin({commit}) {
+        try {
+            const res = await this.$axios.post('/auth/authInfo')
             const {userInfo, authKey} = await res.data;
             await commit('setIsLoggedIn', true);
             await commit('setUserInfo', userInfo);
@@ -65,7 +78,7 @@ export const actions = {
 
     async messageListSaw({commit}, message_no) {
         try {
-            const temp = await this.$axios.post('/auth/userMessageSaw', {
+            await this.$axios.post('/auth/userMessageSaw', {
                 user_no: this.state.auth.userInfo.user_no,
                 message_no
             })

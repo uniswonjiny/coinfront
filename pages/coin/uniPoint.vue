@@ -32,9 +32,9 @@
       <small>보유 UNI point</small>
       <div class="card border-0 bg-light">
         <div class="card-body text-center">
-                    <span class="display-2 font-weight-bold text-danger">
-                        {{ this.$store.state.account.uniPointSum }}
-                    </span>
+          <span class="display-2 font-weight-bold text-danger">
+            {{ this.$store.state.account.uniPointSum }}
+          </span>
           <sub class="font-weight-bold" :style="{'color':'#103178 !important'}">Point</sub>
         </div>
       </div>
@@ -48,17 +48,16 @@
         </div>
       </div>
       <div class="dropdown-divider"></div>
-
       <div v-for="(item, index ) in this.sellList" :key="index">
         <div class="row" @click.prevent="detailDialogEvent(true ,item )">
           <div class="col-5">
             <div>{{ item.sales_type === 'M' ? '구매' : '판매' }}
-              <span v-if="item.type == 'R'" class="ps-badge ps-badge--outstock">
-                                    확인중
-                                </span>
+              <span v-if="item.type ==='R'|| item.type ==='S' " class="ps-badge ps-badge--outstock">
+                 요청중
+              </span>
             </div>
-            <small v-if="item.type === 'R'">{{ item.created_at }}</small>
-            <small v-if="item.type !== 'R'">{{ item.updated_at }}</small>
+            <small v-if="item.type === 'R' || item.type === 'S'">{{ item.created_at }}</small>
+            <small v-if="item.type !== 'R' || item.type !== 'P'">{{ item.updated_at }}</small>
           </div>
           <div class="col-7 text-right">
             <span :class="item.sales_type === 'M' ? 'ps-product__price' : 'ps-product__del' ">{{
@@ -72,10 +71,8 @@
         <div class="col-12 text-center">내역이 없습니다.</div>
         <div class="dropdown-divider"/>
       </div>
-
     </div>
     <div class="dropdown-divider"/>
-
     <v-dialog v-model="buyDialog" max-width="500">
       <v-card>
         <v-toolbar
@@ -137,7 +134,6 @@
               </v-btn>
             </v-col>
           </v-card-actions>
-
         </v-container>
       </v-card>
     </v-dialog>
@@ -191,7 +187,6 @@ export default {
           value: 'sell'
         }
       ],
-
     };
   },
   computed: {

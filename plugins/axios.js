@@ -1,7 +1,7 @@
 export default function ({$axios, redirect, store, error: nuxtError}) {
     $axios.onRequest(config => {
         try {
-            if(store.state.auth.accessToken) config.headers['authorization'] = store.state.auth.accessToken;
+            if (store.state.auth.accessToken) config.headers['authorization'] = store.state.auth.accessToken;
         } catch (e) {
             console.error(e)
             return Promise.reject(e)
@@ -9,8 +9,6 @@ export default function ({$axios, redirect, store, error: nuxtError}) {
     })
 
     $axios.onResponse((response) => {
-        //if(response.headers.authorization) store.state.auth.accessToken = response.headers.authorization;
-
     })
 
     $axios.onError(error => {
@@ -22,7 +20,7 @@ export default function ({$axios, redirect, store, error: nuxtError}) {
         if (code === 401) {
             redirect('/account/login');
         }
-        if(code === 500) {
+        if (code === 500) {
             // 화면상에서 표시할 메세지만 추출해서 전달
             // throw Error(error.response.data.message);
             return Promise.reject(error.response.data)

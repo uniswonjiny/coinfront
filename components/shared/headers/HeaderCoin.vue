@@ -38,7 +38,7 @@
       <div class="container">
         <div class="ps-navigation__left">
           <nav class="ps-main-menu">
-            <render-list :list="mainMenu" className="menu" />
+            <render-list :list="mainMenu" className="menu"/>
           </nav>
         </div>
         <div class="ps-navigation__right">고객센터: <strong>02 - 1600 - 0174</strong></div>
