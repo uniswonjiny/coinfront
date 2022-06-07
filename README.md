@@ -1,6 +1,7 @@
-# Mymedi 1.0.0
+# 채굴기 포인트 판매
 
-## Changelogs
+## https://www.swonjiny.kr
+## user001 / user001
 ### V1.0.0
 * Initial Release
  
